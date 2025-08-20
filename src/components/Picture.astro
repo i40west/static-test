@@ -1,0 +1,83 @@
+---
+// @ts-nocheck - The AstroPicture call generates a Typescript error and I have no idea how to fix it.
+import { Picture as AstroPicture, inferRemoteSize } from 'astro:assets';
+
+import type { ComponentProps } from 'astro/types';
+
+type PictureProps = ComponentProps<typeof AstroPicture>;
+
+export type Props =
+| (Omit<PictureProps, 'width' | 'height'> & { maxSize: number })
+| (PictureProps & { maxSize?: never });
+
+const useFormat = Astro.isPrerendered ? 'avif' : 'webp';
+
+let {
+	src,
+	layout,
+	formats = [useFormat, 'jpg'],
+	densities,
+	width,
+	height,
+	maxSize,
+	...rest
+} = Astro.props as Props & { width?: number; height?: number };
+
+if (typeof width === 'string') {
+	width = parseInt(width, 10);
+}
+if (typeof height === 'string') {
+	height = parseInt(height, 10);
+}
+
+if (layout) {
+	densities = undefined;
+} else {
+	densities = [1,2];
+}
+
+if (maxSize && typeof src === 'object' && 'width' in src && 'height' in src) {
+	if (src.height > src.width) {
+		height = maxSize;
+		width = undefined;
+	} else {
+		width = maxSize;
+		height = undefined;
+	}
+
+} else if (typeof src === 'string' && (src.startsWith('http://') || src.startsWith('https://'))) {
+
+	const origSize = await inferRemoteSize(src);
+	if (origSize) {
+		if (maxSize) {
+			if (origSize.height > origSize.width) {
+				height = maxSize;
+				width = Math.round((origSize.width / origSize.height) * maxSize);
+			} else {
+				width = maxSize;
+				height = Math.round((origSize.height / origSize.width) * maxSize);
+			}
+		} else if (width && !height) {
+			height = Math.round((origSize.height / origSize.width) * width);
+		} else if (height && !width) {
+			width = Math.round((origSize.width / origSize.height) * height);
+		} else if (!width && !height) {
+			width = Math.round(origSize.width / 2);
+			height = Math.round(origSize.height / 2);
+		}
+	}
+
+}
+
+---
+<AstroPicture
+	{...rest}
+	src={src}
+	{...{
+		...(layout && { layout }),
+		...(formats && { formats }),
+		...(width && { width }),
+		...(height && { height }),
+		...(densities && { densities }),
+	}}
+/>

@@ -1,0 +1,44 @@
+---
+import { getImage } from 'astro:assets';
+import type { GetImageResult, ImageMetadata } from 'astro';
+
+export interface Props {
+	href: ImageMetadata;
+	width?: number;
+	[key: string]: unknown; // For the rest parameter
+}
+
+const { href, width = 1600, ...rest } = Astro.props;
+
+const zoomed_avif: GetImageResult | null = Astro.isPrerendered ? await getImage({ src: href, densities: [1,2], width: width, format: 'avif', quality: 85 }) : null;
+const zoomed_webp: GetImageResult | null  = Astro.isPrerendered ? null : await getImage({ src: href, densities: [1,2], width: width, format: 'webp', quality: 85 });
+const zoomed_jpg: GetImageResult = await getImage({ src: href, densities: [1,2], width: width, format: 'jpg', quality: 85 });
+
+---
+<a
+	href={zoomed_jpg.src}
+	data-srcavif={zoomed_avif?.src}
+	data-srcsetavif={zoomed_avif?.srcSet.attribute}
+	data-srcwebp={zoomed_webp?.src}
+	data-srcsetwebp={zoomed_webp?.srcSet.attribute}
+	data-src={zoomed_jpg.src}
+	data-srcset={zoomed_jpg.srcSet.attribute}
+	{...rest} class="zoomable">
+	<slot />
+</a>
+
+<style>
+@keyframes fadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+@keyframes fadeOut {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}
+</style>
+
+<script>
+	import prepzoom from '@lib/client/simplezoom.js';
+	prepzoom();
+</script>

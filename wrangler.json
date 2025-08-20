@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "static-test",
+  "pages_build_output_dir": "dist",
+  "compatibility_date": "2025-08-20",
+  // "compatibility_flags": [
+  //   "nodejs_compat"
+  // ],
+
+  "vars": {
+    "NODE_VERSION": "24"
+  },
+
+  "env": {
+    "preview": {
+      "vars": {
+        "NODE_VERSION": "24"
+      }
+    }
+  }
+}

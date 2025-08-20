@@ -1,0 +1,49 @@
+---
+import { DateTime } from 'luxon';
+import { getImage } from 'astro:assets';
+import config from '~/config';
+
+import type { GetImageResult } from 'astro';
+import type { LayoutProps } from '@lib/types.ts';
+
+export interface Props {
+    pageProps: LayoutProps;
+}
+
+const { pageProps } = Astro.props;
+const frontmatter = pageProps.frontmatter || {};
+
+const title: string = frontmatter.title || config.siteTitle;
+const description: string | undefined = pageProps.description || frontmatter?.description || frontmatter?.excerpt;
+
+const url = new URL(Astro.url.pathname, Astro.url.hostname === 'localhost' ? Astro.url : Astro.site);
+
+let date: string | null = null;
+if (frontmatter.date) {
+    const pubDate = DateTime.fromJSDate(frontmatter.date, { zone: config.timezone || 'America/New_York' });
+    date = pubDate.toISO();
+}
+let updated: string | null = null;
+if (frontmatter.updated_date) {
+    const updatedDate = DateTime.fromJSDate(frontmatter.updated_date, { zone: config.timezone || 'America/New_York' });
+    updated = updatedDate.toISO();
+}
+
+let ogImage: GetImageResult | undefined;
+let ogImageFmt: string | undefined;
+if (frontmatter.image) {
+    ogImage = await getImage({ src: frontmatter.image, width: 1200, format: 'jpg', quality: 85 });
+    ogImageFmt = 'image/' + (ogImage.options.format === 'jpg' ? 'jpeg' : ogImage.options.format);
+}
+
+---
+<meta property="og:title" content={title}>
+{description && <meta property="og:description" content={description}> }
+<meta property="og:url" content={url.href}>
+<meta property="og:site_name" content={config.siteTitle}>
+{ogImage && <meta property="og:image" content={url.origin + ogImage.src}>}
+{ogImage?.options?.width && <meta property="og:image:width" content={`${ogImage.options.width}`}>}
+{ogImage?.options?.height && <meta property="og:image:height" content={`${ogImage.options.height}`}>}
+{ogImage?.options?.format && <meta property="og:image:type" content={ogImageFmt}>}
+{date && <meta property="article:published_time" content={date} />}
+{updated && <meta property="article:modified_time" content={updated} />}

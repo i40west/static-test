@@ -1,0 +1,16 @@
+dist/
+.astro/
+node_modules/
+
+.env
+.env.*
+.DS_Store
+.session.vim
+*.swp
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.wrangler/
+worker-configuration.d.ts

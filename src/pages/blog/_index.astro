@@ -1,0 +1,37 @@
+---
+// This index page has no pagination.
+// It can be used to have a distinct design for "page one" by renaming it
+// without the leading underscore, and renaming [...page].astro to [page].astro
+import { getPosts } from '@lib/blogPosts';
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+import OnePost from '@components/OnePost.astro';
+
+const blogPosts = await getPosts();
+
+const fm = {
+	title: 'Blog',
+	description: 'Blog posts',
+};
+
+---
+<Layout frontmatter={fm} bodyClass="blog index">
+	<header>
+		<Nav />
+		<h1>Blog</h1>
+	</header>
+	<main>
+		{blogPosts.map((blogPost) => (
+		<section>
+			<OnePost post={blogPost} headerLevel={2} thumbSize={240} />
+		</section>
+		))}
+	</main>
+</Layout>
+
+<style>
+h1 {
+	text-align: center;
+	margin-top: var(--space-m);
+}
+</style>

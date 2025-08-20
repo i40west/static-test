@@ -1,0 +1,45 @@
+blockquote {
+	padding: 0 20px 0 65px;
+	margin: 1em 0 1em -1em;
+	position: relative;
+	font-size: 95%;
+	line-height: 1.4em;
+
+	color: var(--deemphasis-color);
+	text-align: justify;
+	max-width: max-content;
+
+	border-left: var(--blockquote-border-left, 10px solid var(--blockquote-border-color, var(--hr-color)));
+	border-right: var(--blockquote-border-right, 2px solid var(--blockquote-border-color, var(--hr-color)));
+}
+
+.even .post-excerpt blockquote {
+	margin-left: 1em;
+}
+
+blockquote::before {
+	content: "\201C"; /* Left Double Quote */
+	font-family: Georgia, serif;
+	font-size: 90px;
+	font-weight: bold;
+	color: var(--blockquote-quote-color, var(--hr-color));
+	position: absolute;
+	left: 10px;
+	top: 15px;
+}
+
+blockquote::after{
+	content: "";
+}
+
+blockquote p {
+	margin: 0.8em 0;
+}
+
+blockquote cite {
+	font-weight: calc(var(--base-weight) + 300);
+}
+
+blockquote cite a {
+	font-weight: normal;
+}

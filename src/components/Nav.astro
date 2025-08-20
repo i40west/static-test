@@ -1,0 +1,130 @@
+---
+const path = Astro.url.pathname;
+---
+<nav>
+	<input type="checkbox" id="menu-toggle" class="menu-toggle">
+	<label for="menu-toggle" class="menu-icon"></label>
+	<ul>
+		<li><a href="/" class={path === '/' ? 'active' : null}>Home</a></li>
+		<li><a href="/blog/" class={path === '/blog/' ? 'active' : null}>Blog</a></li>
+		<li><a href="/source/" class={path === '/source/' ? 'active' : null}>Source</a></li>
+	</ul>
+</nav>
+
+<style>
+	nav {
+		height: 50px;
+		width: 100%;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: flex-start;
+		align-items: center;
+		gap: var(--space-s);
+		padding: 0 var(--space-2xs);
+		background-color: var(--nav-bg-color, transparent);
+		color: var(--nav-color, var(--link-color, inherit));
+	}
+
+	nav .active {
+		color: var(--nav-active-color);
+		text-shadow: var(--nav-active-shadow, initial);
+	}
+
+	nav a {
+		color: var(--header-color);
+		display: inline-block;
+	}
+	nav > * {
+		height: 100%;
+	}
+	nav > a:has(svg) {
+		display: flex;
+		align-items: center;
+	}
+
+	ul {
+		height: 100%;
+		list-style: none;
+		flex-grow: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0;
+		gap: var(--space-m);
+	}
+	ul:last-child {
+		padding-right: calc(var(--space-s) + 36px);
+	}
+
+	a {
+		display: block;
+		text-decoration-color: transparent;
+	}
+
+	a:hover:not(.active) {
+		color: var(--link-hover-color, var(--link-color, inherit));
+		text-decoration-color: var(--link-underline-hover-color, var(--link-underline-color, var(--link-color, inherit)));
+	}
+
+	.title {
+		font-size: var(--step-3);
+		font-weight: 600;
+		line-height: 50px;
+		color: var(--header-color);
+	}
+
+	.menu-toggle {
+		display: none;
+	}
+
+	.menu-icon {
+		display: none;
+		font-size: var(--step-5);
+		cursor: pointer;
+		color: white;
+	}
+
+	@media (max-width: 767px) {
+		.menu-icon {
+			display: block;
+			padding: 0 var(--space-s);
+			flex-grow: 1;
+			text-align: right;
+		}
+
+		nav {
+			justify-content: space-between;
+		}
+
+		ul {
+			display: none;
+			flex-direction: column;
+			gap: var(--space-m);
+			width: 100%;
+			height: fit-content;
+			position: absolute;
+			top: 50px;
+			left: 0;
+			margin: 0;
+			background-color: var(--popover-bg-color, var(--nav-bg-color, var(--bg-color, inherit)));
+			color: var(--nav-color, var(--text-color, inherit));
+			padding: var(--space-xs) 0;
+		}
+
+		.menu-toggle:checked + .menu-icon::before {
+			content: 'x';
+		}
+
+		.menu-toggle:not(:checked) + .menu-icon::before {
+			content: '☰';
+		}
+
+		.menu-toggle:checked + .menu-icon + ul {
+			display: flex;
+		}
+
+		li {
+			text-align: center;
+		}
+	}
+</style>

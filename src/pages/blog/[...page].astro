@@ -1,0 +1,90 @@
+---
+import { getPosts } from '@lib/blogPosts';
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+import OnePost from '@components/OnePost.astro';
+import config from '~/config';
+
+import LeftArrow from '@images/icons/curved-arrow-left.svg';
+import RightArrow from '@images/icons/curved-arrow-right.svg';
+
+import type { Page } from 'astro';
+import type { BlogPost } from '@lib/blogPosts';
+import type { ValidCollections} from '~/content.config';
+
+export interface Props {
+	// BlogPost is the type of page.data
+	page: Page<BlogPost<ValidCollections>>;
+}
+
+export async function getStaticPaths({ paginate }) {
+	const posts = await getPosts();
+	return paginate(posts, { pageSize: config.postsPerPage || 10 });
+}
+
+const { page } = Astro.props;
+
+const pageStr = page.currentPage === 1 ? '' : ` - page ${page.currentPage}`;
+const fm = {
+	title: `Blog${pageStr} | ${config.siteTitle}`,
+	description: 'Blog posts',
+};
+
+---
+<Layout frontmatter={fm} bodyClass="blog index">
+	<header>
+		<Nav />
+		<h1>Blog</h1>
+		{page.currentPage > 1 && <div class="pageno-subhead">Page {page.currentPage}</div>}
+	</header>
+	<main>
+		{page.data.map((blogPost) => (
+		<section>
+			<OnePost post={blogPost} headerLevel={2} thumbSize={240} />
+		</section>
+		))}
+		<div class="pagination">
+			{page.url.prev && <a href={page.url.prev} class="prev" rel="prev"><LeftArrow width="25" /> Newer posts</a>}
+			{page.url.next && <a href={page.url.next} class="next" rel="next">Older posts <RightArrow width="25" /></a>}
+		</div>
+	</main>
+</Layout>
+
+<style>
+h1 {
+	text-align: center;
+	margin-top: var(--space-m);
+}
+
+.pagination {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-content: center;
+	align-items: baseline;
+	gap: var(--space-xl-2xl);
+	margin-top: var(--space-2xl);
+	margin-bottom: var(--space-m);
+}
+
+.pagination a.prev svg {
+	position: relative;
+	top: 5px;
+	margin-right: 5px;
+}
+
+.pagination a.next svg {
+	position: relative;
+	margin-left: 5px;
+	top: -4px;
+}
+
+.pageno-subhead {
+	font-family: var(--header-font);
+	font-weight: calc(var(--base-weight) - 100);
+	font-size: calc(var(--step-0) * 0.90);
+	text-align: center;
+	margin-top: calc(var(--space-xs) * -0.75);
+}
+</style>
+

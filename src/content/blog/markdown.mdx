@@ -1,0 +1,217 @@
+---
+title: "Markdown Rendering"
+date: 2024-12-22T22:00:00Z
+description: "Test page for Markdown rendering."
+blurb: "Test page for Markdown rendering."
+---
+import { Image, Picture } from 'astro:assets';
+import cottonCandy from '@images/cotton-candy.jpg';
+import iWantCandy from '@images/iwantcandy.jpg';
+
+## Headers
+
+Headings level 1 through 6.
+
+<h1>Heading Level 1</h1>
+<h2>Heading Level 2</h2>
+### Heading Level 3
+#### Heading Level 4
+##### Heading Level 5
+###### Heading Level 6
+
+## Paragraph
+
+Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.
+
+Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.
+
+## Blockquotes
+
+#### Without attribution
+
+> This is a blockquote for testing purposes.
+> **Note** that you can use *Markdown syntax* within a blockquote.
+
+#### With attribution
+
+> Never gonna give you up, never gonna let you down.
+> Never gonna run around and desert you.
+> — <cite>Rick Astley[^1]</cite>
+
+[^1]: From his relatively obscure music video, available at https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+## Tables
+
+   Name | Age
+--------|------
+  Bob | 27
+  Alice | 23
+
+#### Inline Markdown within tables
+
+| Italics | Bold     | Code |
+| --------  | -------- | ------ |
+| *italics* | **bold** | `code` |
+
+| Option | Description |
+| ------ | ----------- |
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default. |
+| ext  | extension to be used for dest files. |
+
+## Code Blocks
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Example HTML5 Document</title>
+</head>
+<body>
+  <p>Test</p>
+</body>
+</html>
+```
+
+``` js
+var foo = function (bar) {
+  return bar++;
+};
+
+console.log(foo(5));
+```
+
+## List Types
+
+#### Ordered List
+
+1. First item
+2. Second item
+3. Third item
+
+#### Unordered List
+
+* List item
+* Another item
+* And another item
+
+#### Nested list
+
+* Fruit
+  * Apple
+  * Orange
+  * Banana
+* Dairy
+  * Milk
+  * Cheese
+
+#### Definition list
+
+Term
+: definition
+
+Another Term
+: another definition
+
+A Third Term
+: there are two definitions for A Third Term...
+: ...and this is the second one.
+
+A Dual Term
+Another Dual Term
+: this is two terms with one associated definition.
+
+Normal
+: another normal item
+
+## Emphasis
+
+**This is bold text**
+
+__This is bold text__
+
+*This is italic text*
+
+_This is italic text_
+
+~~Strikethrough~~
+
+## Links
+
+[Internal link](/blog/markdown)
+
+[External link](http://i40west.io)
+
+Autoconverted link: https://i40west.io
+
+## Images
+
+#### &lt;Picture&gt; tag with &lt;figure&gt;
+
+<figure>
+  <Picture src={iWantCandy} alt="I Want Candy" width={480} formats={['avif','jpg']} densities={[1,2]} />
+  <figcaption>I Want Candy</figcaption>
+</figure>
+
+#### &lt;Image&gt; tag
+
+<Image src={cottonCandy} alt="Cotton Candy" width={480} format='avif' densities={[1,2]} />
+
+
+## Other Elements — abbr, sub, sup, kbd, mark
+
+<p>
+  <abbr title="Graphics Interchange Format">GIF</abbr> is a bitmap image format.
+</p>
+<p>
+H<sub>2</sub>O
+</p>
+<p>
+X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
+</p>
+<p>
+Press <kbd><kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Delete</kbd></kbd> to end the session.
+</p>
+<p>
+Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
+</p>
+
+### [Subscript](https://github.com/markdown-it/markdown-it-sub) / [Superscript](https://github.com/markdown-it/markdown-it-sup)
+
+- 19^th^
+- H~2~O
+
+
+### [Footnotes](https://github.com/markdown-it/markdown-it-footnote)
+
+Footnote 1 link[^first].
+
+Footnote 2 link[^second].
+
+Inline footnote^[Text of inline footnote] definition.
+
+Duplicated footnote reference[^second].
+
+[^first]: Footnote **can have markup**
+
+  and multiple paragraphs.
+
+[^second]: Footnote text.
+
+## Github Alerts
+
+> [!NOTE]
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]
+> Negative potential consequences of an action.

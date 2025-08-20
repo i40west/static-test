@@ -1,0 +1,65 @@
+---
+import { DateTime } from 'luxon';
+import { getCollection, render } from 'astro:content';
+import { getPost } from '@lib/blogPosts';
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+import config from '~/config';
+
+import type { BlogPost } from '@lib/blogPosts';
+
+export interface Props {
+	entry: BlogPost<'blog'>;
+}
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+	const entries = await getCollection('blog');
+	return entries.map(e => ({
+		params: { id: e.id }, props: { entry: e },
+	}));
+}
+
+let post: BlogPost<'blog'>;
+if (Astro.isPrerendered) {
+	post = Astro.props.entry;
+} else {
+	if (Astro.params.id === undefined) {
+		return new Response(null, {
+			status: 404,
+			statusText: 'Not found',
+		});
+
+	}
+	post = await getPost(Astro.params.id, { collection: 'blog' });
+	if (!post) {
+		return new Response(null, {
+			status: 404,
+			statusText: 'Not found',
+		});
+	}
+}
+
+
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+// zod has turned the image into an Astro image, but it's in entry.data.image
+if (post.data.image) {
+	remarkPluginFrontmatter.image = post.data.image;
+}
+
+const pubDate = DateTime.fromISO(remarkPluginFrontmatter.date, { zone: config.timezone || 'America/New_York' });
+const date = pubDate.toFormat('dd MMMM yyyy');
+const dateISO = pubDate.toFormat('yyyy-MM-dd');
+
+---
+<Layout frontmatter={remarkPluginFrontmatter} bodyClass="blog post">
+	<Nav />
+	<main>
+		<article>
+			<h1>{remarkPluginFrontmatter.title}</h1>
+			<p class="meta"><time datetime={dateISO}>{date}</time></p>
+			<Content />
+		</article>
+	</main>
+</Layout>

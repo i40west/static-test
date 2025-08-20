@@ -1,0 +1,40 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+<Layout>
+	<main>
+		<div class="big">
+			<div>404</div>
+		</div>
+		<div class="sub">Page Not Found</div>
+		<div class="link"><a href="/">go home</a></div>
+	</main>
+</Layout>
+
+<style>
+	.big {
+		width: 100vw;
+		height: 75vh;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.big div {
+		font-size: 50vw;
+		font-weight: 500;
+		color: hsl(0 0% 45% / 100%);
+		margin: auto;
+	}
+
+	.sub {
+		text-align: center;
+		font-size: 2.5rem;
+	}
+	.link {
+		text-align: center;
+		font-size: 1rem;
+		margin-top: 1rem;
+	}
+</style>

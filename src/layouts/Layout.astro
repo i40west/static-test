@@ -1,0 +1,63 @@
+---
+import 'sanitize.css';
+import '@styles/fonts.css';
+import '@styles/variables.css';
+import '@styles/styles.css';
+import '@styles/tables.css';
+import '@styles/dl.css';
+import '@styles/blockquotes.css';
+import '@styles/alerts.css';
+import '@styles/site.css';
+import 'sanitize.css/reduce-motion.css';
+
+import config from '~/config';
+
+import OpenGraph from '@components/OpenGraph.astro';
+
+import type { LayoutProps } from '@lib/types.ts';
+export type Props = LayoutProps;
+
+let { title, description, frontmatter, bodyClass, ogImage } = Astro.props;
+if (!frontmatter) {
+	Astro.props.frontmatter = {};
+	frontmatter = Astro.props.frontmatter;
+}
+
+const metaDesc: string = description || frontmatter?.description || frontmatter?.excerpt || config.siteDescription;
+
+if (ogImage) {
+	frontmatter.image = ogImage;
+}
+
+const canonical = new URL(Astro.url.pathname, Astro.url.hostname === 'localhost' ? Astro.url : Astro.site).href;
+
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={metaDesc}/>
+		<meta name="viewport" content="width=device-width" />
+		<meta name="referrer" content="origin-when-cross-origin" />
+		<link rel="canonical" href={canonical} />
+
+		<title>{title || frontmatter?.title || config.siteTitle }</title>
+
+		<OpenGraph pageProps={Astro.props} />
+		<slot name="head" />
+		<style is:inline>
+		.preload * { transition: none !important; animation-duration: 0.001s !important; }
+		</style>
+		<script is:inline>
+		document.documentElement.classList.add('preload');
+		window.addEventListener('load', () => {
+			document.documentElement.classList.remove('preload');
+		});
+		</script>
+
+	</head>
+	<body class={bodyClass}>
+		<slot />
+	</body>
+</html>

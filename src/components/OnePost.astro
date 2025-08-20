@@ -1,0 +1,103 @@
+---
+import { getPosts } from '@lib/blogPosts';
+import Picture from '@components/Picture.astro';
+import type { BlogPost } from '@lib/blogPosts';
+import type { ValidCollections } from '~/content.config';
+import type { ImageMetadata } from 'astro';
+
+// Either a post or an offset is required, but not both.
+export type Props = (
+| { post: BlogPost<ValidCollections>; offset?: never }
+| { post?: never; offset: number }
+) & {
+	sectionClass?: string;
+	headerLevel?: number;
+	thumbSize?: number;
+};
+
+const { post, offset, sectionClass, headerLevel = 3, thumbSize = 200 } = Astro.props;
+
+const HX = `h${headerLevel}`;
+
+let postToShow: BlogPost<ValidCollections> | undefined;
+if (post) {
+	postToShow = post;
+}	else {
+	const blogItems = await getPosts();
+	postToShow = blogItems[offset];
+}
+
+const image = postToShow.data.image as ImageMetadata | undefined;
+
+const classes = ['post-1'];
+if (sectionClass) {
+	classes.push(sectionClass);
+}
+
+---
+<div class:list={classes}>
+	{Astro.slots.has('section-header') && (
+	<div class="section-header"><slot name="section-header" /></div>
+	)}
+	<div class="post-header">
+		<HX><a href={postToShow.url}>{postToShow.frontmatter.title}</a></HX>
+		<p class="meta">
+			<time datetime={postToShow.isoDate}>{postToShow.fmtDate}</time>
+		</p>
+	</div>
+	<div class="excerpt">
+		{ image ?
+		<a href={postToShow.url}>
+			<Picture src={image} alt={postToShow.frontmatter.title} maxSize={thumbSize}/>
+		</a>
+		: null }
+		<p>{postToShow.frontmatter.excerpt}</p>
+	</div>
+</div>
+
+<style>
+.excerpt {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: var(--space-s);
+}
+
+.excerpt img {
+	flex: 0 0 auto;
+	display: block;
+}
+
+.excerpt p {
+	flex: 1 1 13em;
+	min-width: 13em;
+}
+.excerpt:not(:has(img)) p {
+	flex: 1 1 100%;
+}
+
+.excerpt a:has(img) {
+	border: 1px solid transparent;
+	transition: border-color 0.3s ease;
+}
+
+.post-1:has(h3 a:hover) .excerpt a:has(img),
+.post-1:has(h2 a:hover) .excerpt a:has(img),
+.excerpt a:has(img):hover {
+	border: 1px solid var(--header-link-underline-hover-color);
+}
+
+.post-1:has(.excerpt a:hover img) .post-header h3 a,
+.post-1:has(.excerpt a:hover img) .post-header h2 a {
+	text-decoration: underline;
+	text-decoration-color: var(--header-link-underline-hover-color);
+	color: var(--header-link-hover-color);
+}
+
+.meta {
+	margin-top: 0;
+	font-size: 90%;
+}
+</style>

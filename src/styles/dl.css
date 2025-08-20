@@ -1,0 +1,69 @@
+/* Definition lists */
+dl {
+	display: grid;
+	grid-template-columns: max-content auto;
+	column-gap: var(--space-s, 15px);
+	row-gap: var(--space-2xs, 7px);
+	border-top: var(--dl-line, 1px dashed var(--dl-line-color, var(--line-color, var(--border-color, transparent))));
+	border-bottom: var(--dl-line, 1px dashed var(--dl-line-color, var(--line-color, var(--border-color, transparent))));
+	padding-bottom: 3px;
+}
+/* so Firefox doesn't mess up item ordering */
+@supports(selector(:has(+ dd + dd))) {
+	dl {
+		grid-auto-flow: dense;
+	}
+}
+
+dl dl {
+	margin: 0;
+}
+
+dt, dd {
+	padding-top: var(--space-2xs, 7px);
+}
+dd:last-of-type,
+dt:last-of-type {
+	padding-bottom: 4px;
+}
+
+dt {
+	grid-column-start: 1;
+	font-weight: bolder;
+	color: var(--dt-color, var(--text-color));
+	text-align: right;
+}
+
+dd {
+	grid-column-start: 2;
+}
+
+dt + dt + dd {
+	grid-row-end: span 2;
+}
+dt + dt + dt + dd {
+	grid-row-end: span 3;
+}
+
+dt:has(+ dd + dd) {
+	grid-row-end: span 2;
+}
+dt:has(+ dd + dd + dd) {
+	grid-row-end: span 3;
+}
+
+dt:not(:first-of-type),
+dd:not(:first-of-type) {
+	border-top: var(--dl-line, 1px dashed var(--dl-line-color, var(--line-color, var(--border-color, transparent))));
+}
+
+dt + dt:not(:first-of-type),
+dd + dd:not(:first-of-type) {
+	border-top: none;
+}
+
+dl.bare,
+dl.bare dd,
+dl.bare dt {
+	border: none;
+}

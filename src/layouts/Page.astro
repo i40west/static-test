@@ -1,0 +1,19 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+
+const {frontmatter} = Astro.props;
+let classes = 'page';
+if (frontmatter?.category) {
+	classes += ` ${frontmatter.category}`;
+}
+
+---
+<Layout bodyClass={classes} frontmatter={frontmatter}>
+	<Nav />
+	<main>
+		<article>
+			<slot />
+		</article>
+	</main>
+</Layout>

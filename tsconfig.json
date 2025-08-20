@@ -1,0 +1,31 @@
+{
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "paths": {
+      "~/*": ["./src/*"],
+      "@components/*": ["src/components/*"],
+      "@images/*": ["src/images/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@styles/*": ["src/styles/*"],
+      "@lib/*": ["src/lib/*"]
+    },
+    // uncomment to use React
+    // "module": "nodenext",
+    // "jsx": "react-jsx",
+    // "jsxImportSource": "react"
+    "types": [
+      "node",
+      // uncomment to use React
+      // "react",
+      // "react-dom",
+      "luxon",
+      "./worker-configuration.d.ts"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

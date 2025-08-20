@@ -1,0 +1,14 @@
+---
+title: "A Post"
+date: 2023-04-24T00:21:02Z
+image: '@images/iwantcandy.jpg'
+---
+import Picture from '@components/Picture.astro';
+import Simplezoom from '@components/Simplezoom.astro';
+import candy from '@images/iwantcandy.jpg';
+
+This is a post.
+
+<Simplezoom href={candy}>
+<Picture src={candy} alt="I Want Candy" width={640} />
+</Simplezoom>

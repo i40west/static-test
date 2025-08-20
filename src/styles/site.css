@@ -1,0 +1,19 @@
+/* Local site styles */
+
+main {
+	margin-top: var(--space-2xl);
+}
+
+main section, main article {
+	width: 44em;
+	max-width: 95vw;
+	margin: 0 auto;
+}
+
+article h2 {
+	margin-top: var(--space-xl);
+}
+
+main img {
+	animation: fadeIn 0.4s;
+}

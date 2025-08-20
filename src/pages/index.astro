@@ -1,0 +1,43 @@
+---
+import { getPosts } from '@lib/blogPosts';
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+// @ts-ignore
+import ObfuMatic from 'obfumatic/astro';
+import OnePost from '@components/OnePost.astro';
+import ogImage from '@images/iwantcandy.jpg';
+
+const blogPosts = await getPosts();
+const latestPost = blogPosts[0];
+
+---
+
+<Layout bodyClass="home" ogImage={ogImage}>
+	<Nav />
+	<main>
+
+		<section>
+			<h1>Hello Astro</h1>
+			<p>A starter template for Astro.</p>
+		</section>
+
+		<hr />
+
+		<section id="blog">
+			<OnePost post={latestPost} sectionClass="post-latest">
+				<Fragment slot="section-header">
+					Latest Post
+				</Fragment>
+			</OnePost>
+
+			<p><a href="/blog/">More posts...</a></p>
+		</section>
+
+		<section>
+			<p>
+				<ObfuMatic email="foo@bar.com" text="Click here to email me" />
+			</p>
+		</section>
+
+	</main>
+</Layout>

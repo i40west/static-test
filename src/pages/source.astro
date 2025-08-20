@@ -1,0 +1,27 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Nav from '@components/Nav.astro';
+import { Code } from 'astro:components';
+
+import code from './source.astro?raw';
+
+const fm = {
+	title: 'The Source',
+	description: 'This page displays its own Astro source code.',
+};
+
+---
+<Layout frontmatter={fm} bodyClass="page">
+	<header>
+		<Nav />
+	</header>
+	<main>
+		<article>
+			<h1>The Source</h1>
+			<p>This page displays its own Astro source code.</p>
+
+			<Code code={code} lang="astro" theme="tokyo-night" />
+		</article>
+	</main>
+
+</Layout>
